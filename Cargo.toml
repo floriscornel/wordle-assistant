@@ -1,0 +1,13 @@
+[package]
+name = "wordle-assistant"
+version = "0.1.0"
+description = "A CLI tool to assist in solving wordle puzzles"
+authors = ["Floris Cornel <floris@cornel.email>"]
+license = "MIT/Apache-2.0"
+readme = "README.md"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+inquire = { version = "0.5.2", features = ["date", "editor"] }
