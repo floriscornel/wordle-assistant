@@ -1,6 +1,9 @@
+#[cfg(feature = "cli")]
+use crate::wordle::{Feedback, Guess, Wordle};
+#[cfg(feature = "cli")]
 use inquire::{validator::Validation, Text};
-use wordle_assistant::wordle::{Feedback, Guess, Wordle};
 
+#[cfg(feature = "cli")]
 fn get_guess() -> Option<Guess> {
     let validator = |input: &str| {
         if input.chars().count() != 5 {
@@ -30,6 +33,7 @@ fn get_guess() -> Option<Guess> {
     }
 }
 
+#[cfg(feature = "cli")]
 fn get_feedback(char: char) -> Feedback {
     use inquire::{error::InquireError, Select};
 
@@ -49,7 +53,8 @@ fn get_feedback(char: char) -> Feedback {
     }
 }
 
-fn main() {
+#[cfg(feature = "cli")]
+pub fn interactive_cli() {
     let mut wordle = Wordle::new();
     let permutations = wordle.permutations();
     println!(

@@ -1,8 +1,7 @@
-#![allow(dead_code, unused_variables)]
+use crate::WORDLE_LETTER_COUNT;
 
-pub const WORDLE_LETTER_COUNT: usize = 5;
-
-use crate::{choice::order_choices, word_list::WordList};
+use crate::choice::order_choices;
+use crate::word_list::WordList;
 
 pub type Guess = [(char, Feedback); WORDLE_LETTER_COUNT];
 
@@ -13,7 +12,7 @@ pub enum Feedback {
     Correct,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Wordle {
     guesses: Vec<Guess>,
     word_list: WordList,
@@ -78,6 +77,12 @@ impl Wordle {
             }
         }
         true
+    }
+}
+
+impl Default for Wordle {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

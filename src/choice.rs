@@ -1,33 +1,44 @@
-use crate::wordle::WORDLE_LETTER_COUNT;
 use std::collections::{HashMap, HashSet};
 
-type Word = [u8; WORDLE_LETTER_COUNT];
+use crate::{Word, WORDLE_LETTER_COUNT, WORD_LIST};
 
-// Determine the value of a word by the number of times each letter appears in the word
-fn get_value(word: &Word, map: &HashMap<u8, i32>) -> i32 {
-    let mut score = 0;
-    for letter in HashSet::<&u8>::from_iter(word.iter()) {
-        score += map.get(letter).unwrap();
-    }
-    score
+pub fn get_frequency_map() -> (HashMap<Word, u64>, u64) {
+    let mut max = u64::MIN;
+    let map = HashMap::from_iter(WORD_LIST.into_iter().map(|(w, c)| {
+        max = max.max(*c);
+        (*w, *c)
+    }));
+    (map, max)
 }
 
 // Order the choices by the number of times each letter appears in the word
 pub fn order_choices(words: &mut Vec<Word>) {
-    let mut map = HashMap::<u8, i32>::new();
+    let mut letter_counts = HashMap::<u8, i32>::new();
+    let (word_frequencies, freq_max) = get_frequency_map();
+
     for word in words.clone() {
         for letter in HashSet::<&u8>::from_iter(word.iter()) {
-            let count = map.entry(*letter).or_insert(0);
+            let count = letter_counts.entry(*letter).or_insert(0);
             *count += 1;
         }
     }
-    let mut mapped: Vec<([u8; WORDLE_LETTER_COUNT], i32)> = words
+
+    let get_value = |word: &Word| -> u64 {
+        let mut letter_score = 0;
+        for letter in HashSet::<&u8>::from_iter(word.iter()) {
+            letter_score += letter_counts.get(letter).unwrap();
+        }
+        let letter_score: f64 = (letter_score as f64) / (words.len() * WORDLE_LETTER_COUNT) as f64;
+        let frequency_score = *word_frequencies.get(word).unwrap_or(&0) as f64 / freq_max as f64;
+        (10_000_000.0 * (letter_score + frequency_score)) as _
+    };
+
+    let mut mapped: Vec<([u8; WORDLE_LETTER_COUNT], u64)> = words
         .iter()
-        .map(|word| (*word, get_value(word, &map)))
+        .map(|word| (*word, get_value(word)))
         .collect::<_>();
     mapped.sort_unstable_by(|a, b| b.1.cmp(&a.1));
-    let x = mapped.iter().map(|(word, _)| *word).collect::<Vec<Word>>();
-    *words = x;
+    *words = mapped.iter().map(|(word, _)| *word).collect::<Vec<Word>>();
 }
 
 #[cfg(test)]
@@ -35,26 +46,22 @@ mod tests {
     use super::{order_choices, Word};
 
     #[test]
-    fn example_1() {
+    fn check_preferred_order() {
         let input = vec![
-            "KEECH", "KEEFS", "KEEKS", "KEELS", "KEEMA", "KEENO", "KEENS", "KEEPS", "KEETS",
-            "KEEVE", "KEFIR", "KEHUA", "KEIRS", "KELEP", "KELIM", "KELLS", "KELLY", "KELPS",
-            "KELPY", "KELTS", "KELTY", "KEMBO", "KEMBS", "KEMPS", "KEMPT", "KEMPY", "KENAF",
-            "KENCH", "KENDO", "KENOS", "KENTE", "KENTS", "KEPIS", "KERBS", "KEREL", "KERFS",
-            "KERKY", "KERMA", "KERNE", "KERNS", "KEROS", "KERRY", "KERVE", "KESAR", "KESTS",
-            "KETAS", "KETCH", "KETES", "KETOL", "KEVEL", "KEVIL", "KEXES", "KEYED", "KEYER",
-            "KHADI", "KHAFS", "KHAKI", "KHANS", "KHAPH", "KHATS", "KHAYA", "KHAZI", "KHEDA",
-            "KHETH", "KHETS", "KHOJA", "KHORS", "KHOUM", "KHUDS", "KIAAT",
+            "AROSE", "SOARE", "AEROS", "SERAI", "REAIS", "ARISE", "RAISE", "AESIR", "ALOES",
+            "REALS", "LAERS", "SERAL", "ARLES", "LEARS", "RALES", "LARES", "EARLS", "LASER",
+            "TOEAS", "STOAE", "RESAT", "ARETS", "STRAE", "REAST", "STARE", "EARST", "ASTER",
+            "TEARS", "STEAR", "TARES", "TASER", "TERAS", "RATES", "AISLE", "AEONS", "NARES",
+            "SANER", "EARNS", "REANS", "NEARS", "SNARE", "ANISE", "ISNAE", "SAINE", "URSAE",
+            "URASE", "UREAS", "AURES", "ARSED", "SARED",
         ];
         let expected = vec![
-            "KHETS", "KETAS", "KESAR", "KELTS", "KENTS", "KERNS", "KEROS", "KEIRS", "KELPS",
-            "KERFS", "KENOS", "KEPIS", "KEMPS", "KERBS", "KESTS", "KETES", "KEETS", "KELLS",
-            "KEELS", "KEMBS", "KERMA", "KEENS", "KHEDA", "KEHUA", "KEEPS", "KETCH", "KELTY",
-            "KETOL", "KEEFS", "KHETH", "KEMPT", "KENAF", "KENCH", "KELPY", "KELIM", "KEXES",
-            "KEEKS", "KEFIR", "KEREL", "KEMPY", "KERNE", "KEVIL", "KENTE", "KEEMA", "KENDO",
-            "KERRY", "KERKY", "KHATS", "KEYER", "KEECH", "KELLY", "KELEP", "KEMBO", "KEENO",
-            "KHANS", "KERVE", "KEVEL", "KHORS", "KEYED", "KHAFS", "KEEVE", "KHUDS", "KHADI",
-            "KHAZI", "KHOJA", "KHAPH", "KHAYA", "KHAKI", "KIAAT", "KHOUM",
+            "RATES", "LASER", "TEARS", "STARE", "ASTER", "TASER", "TARES", "STEAR", "TERAS",
+            "REAST", "STRAE", "EARST", "RESAT", "ARETS", "RAISE", "REALS", "EARLS", "ARISE",
+            "ARLES", "LARES", "SERAL", "RALES", "LEARS", "LAERS", "EARNS", "SNARE", "NEARS",
+            "SANER", "NARES", "REANS", "REAIS", "SERAI", "AESIR", "AROSE", "AEROS", "SOARE",
+            "URSAE", "AURES", "URASE", "UREAS", "ARSED", "SARED", "TOEAS", "STOAE", "AISLE",
+            "ANISE", "SAINE", "ISNAE", "ALOES", "AEONS",
         ];
 
         let mut words: Vec<Word> = input
