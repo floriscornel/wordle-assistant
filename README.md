@@ -9,7 +9,7 @@ The CLI will show give a list of best choices to choose from at any point in the
  12971 Possible words: ["OTHER", "THEIR", "WHICH", "THERE", "FIRST", "THESE", "WOULD", ...
 ``` 
 As a user you can register which guess you've made in Wordle.
-You should then input the feedback from Wordle for each of the letters from your guess. You can choose from
+You should then input the feedback from Wordle for each of the letters from your guess.
 ```
 > What was your word guess? OTHER
 Your guess was OTHER.
