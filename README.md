@@ -6,7 +6,7 @@ This is a simple CLI tool that assist in solving wordle puzzles.
 ## Usage
 The CLI will show give a list of best choices to choose from at any point in the game.
 ```
- 12971 Possible words: ["OTHER", "THEIR", "WHICH", "THERE", "FIRST", "THESE", "WOULD", "PRICE", "STATE", "EMAIL", "CLICK", "YEARS", "AFTER", "MUSIC", "WORLD", "ITEMS", "STORE", "GAMES", "VIDEO", "GREAT", "LINKS", "TERMS", "THOSE", "ORDER", "UNDER", "BASED", "HOTEL", "WHERE", "PAGES", "BOOKS", "HOUSE", "GROUP", "USING", "SINCE", "COULD", "TIMES", "WATER", "MEDIA", "PHONE", "RATES", "SOUTH", "LEARN", "PLACE", "TODAY", "LOCAL", "RIGHT", "SITES", "SALES", "POWER", "WOMEN"]
+ 12971 Possible words: ["OTHER", "THEIR", "WHICH", "THERE", "FIRST", "THESE", "WOULD", ...
 ``` 
 As a user you can register which guess you've made in Wordle.
 You should then input the feedback from Wordle for each of the letters from your guess. You can choose from
