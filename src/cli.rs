@@ -21,7 +21,8 @@ fn get_guess() -> Option<Guess> {
         Ok(guess) => {
             println!("Your guess was {}.", guess);
             let mut guesses = vec![];
-            for char in guess.chars() {
+            for c in guess.chars() {
+                let char = c.to_ascii_uppercase();
                 guesses.push((char, get_feedback(char)));
             }
             guesses.try_into().ok()
