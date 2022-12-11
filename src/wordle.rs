@@ -1,18 +1,18 @@
-use crate::WORDLE_LETTER_COUNT;
+#[cfg(feature = "api_code")]
+use serde::{Deserialize, Serialize};
 
-use crate::choice::order_choices;
 use crate::word_list::WordList;
+use crate::{Word, WORDLE_LETTER_COUNT};
 
 pub type Guess = [(char, Feedback); WORDLE_LETTER_COUNT];
 
-#[derive(Debug)]
+#[cfg_attr(feature = "api_code", derive(Serialize, Deserialize, Debug))]
 pub enum Feedback {
     NotCorrect,
     OtherLocation,
     Correct,
 }
 
-#[derive(Debug)]
 pub struct Wordle {
     guesses: Vec<Guess>,
     word_list: WordList,
@@ -30,18 +30,14 @@ impl Wordle {
         self.guesses.push(guess);
     }
 
-    pub fn permutations(&self) -> Vec<String> {
+    pub fn permutations(&self) -> Vec<Word> {
         let mut found = Vec::new();
         for word in &self.word_list.set {
             if self.check(word) {
                 found.push(*word);
             }
         }
-        order_choices(&mut found);
         found
-            .iter()
-            .map(|arr| String::from_utf8(arr.to_vec()).unwrap())
-            .collect()
     }
 
     fn check(&self, word: &[u8; WORDLE_LETTER_COUNT]) -> bool {
@@ -126,7 +122,11 @@ mod tests {
         let found = wordle.permutations();
         let expected = vec!["INEPT"];
         assert_eq!(
-            HashSet::<String>::from_iter(found.into_iter()),
+            HashSet::<String>::from_iter(
+                found
+                    .into_iter()
+                    .map(|s| String::from_utf8(s.to_vec()).unwrap())
+            ),
             HashSet::<String>::from_iter(expected.into_iter().map(|s| s.to_string()))
         );
     }
@@ -158,7 +158,11 @@ mod tests {
         let found = wordle.permutations();
         let expected = vec!["AFOUL", "ALOUD", "AMOUR"];
         assert_eq!(
-            HashSet::<String>::from_iter(found.into_iter()),
+            HashSet::<String>::from_iter(
+                found
+                    .into_iter()
+                    .map(|s| String::from_utf8(s.to_vec()).unwrap())
+            ),
             HashSet::<String>::from_iter(expected.into_iter().map(|s| s.to_string()))
         );
     }
@@ -197,7 +201,11 @@ mod tests {
         let found = wordle.permutations();
         let expected = vec!["BEGIN", "LEVIN"];
         assert_eq!(
-            HashSet::<String>::from_iter(found.into_iter()),
+            HashSet::<String>::from_iter(
+                found
+                    .into_iter()
+                    .map(|s| String::from_utf8(s.to_vec()).unwrap())
+            ),
             HashSet::<String>::from_iter(expected.into_iter().map(|s| s.to_string()))
         );
     }
@@ -222,7 +230,11 @@ mod tests {
         let found = wordle.permutations();
         let expected = vec!["DIANE", "ENTIA", "ELAIN", "INANE", "LIANE"];
         assert_eq!(
-            HashSet::<String>::from_iter(found.into_iter()),
+            HashSet::<String>::from_iter(
+                found
+                    .into_iter()
+                    .map(|s| String::from_utf8(s.to_vec()).unwrap())
+            ),
             HashSet::<String>::from_iter(expected.into_iter().map(|s| s.to_string()))
         );
     }
@@ -254,7 +266,11 @@ mod tests {
         let found = wordle.permutations();
         let expected = vec!["ITCHY"];
         assert_eq!(
-            HashSet::<String>::from_iter(found.into_iter()),
+            HashSet::<String>::from_iter(
+                found
+                    .into_iter()
+                    .map(|s| String::from_utf8(s.to_vec()).unwrap())
+            ),
             HashSet::<String>::from_iter(expected.into_iter().map(|s| s.to_string()))
         );
     }

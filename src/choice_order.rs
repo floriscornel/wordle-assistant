@@ -1,8 +1,16 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{Word, WORDLE_LETTER_COUNT, WORD_LIST};
+use crate::{wordle::Wordle, Word, WORDLE_LETTER_COUNT, WORD_LIST};
 
-pub fn get_frequency_map() -> (HashMap<Word, u64>, u64) {
+impl Wordle {
+    pub fn ordered_permutations(&self) -> Vec<Word> {
+        let mut words = self.permutations();
+        order_choices(&mut words);
+        words
+    }
+}
+
+fn get_frequency_map() -> (HashMap<Word, u64>, u64) {
     let mut max = u64::MIN;
     let map = HashMap::from_iter(WORD_LIST.into_iter().map(|(w, c)| {
         max = max.max(*c);
@@ -12,7 +20,7 @@ pub fn get_frequency_map() -> (HashMap<Word, u64>, u64) {
 }
 
 // Order the choices by the number of times each letter appears in the word
-pub fn order_choices(words: &mut Vec<Word>) {
+fn order_choices(words: &mut Vec<Word>) {
     let mut letter_counts = HashMap::<u8, i32>::new();
     let (word_frequencies, freq_max) = get_frequency_map();
 

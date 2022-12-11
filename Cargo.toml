@@ -1,6 +1,6 @@
 [package]
 name = "wordle-assistant"
-version = "0.1.1"
+version = "0.1.2"
 description = "A CLI tool to assist in solving wordle puzzles"
 authors = ["Floris Cornel <floris@cornel.email>"]
 license = "MIT/Apache-2.0"
@@ -11,14 +11,25 @@ edition = "2021"
 name = "cli"
 required-features = ["cli"]
 
+[[bin]]
+name = "api"
+required-features = ["api"]
+
 [features]
 cli = ["dep:inquire"]
+api_code = ["dep:serde"]
+api_axum = ["dep:axum", "dep:tokio"]
+api = ["api_code", "api_axum"]
+all = ["cli", "api"]
 
 [dependencies]
 phf = { version = "0.11.1", default-features = false }
 inquire = { version = "0.5.2", features = ["date", "editor"], optional = true  }
+axum = { version = "0.6.1", optional = true }
+tokio = { version = "1.23.0", features = ["full"], optional = true }
+serde = { version = "1.0", features = ["derive"], optional = true }
 
 [build-dependencies]
-csv = "1.1"
+csv = "1.1.6"
 phf = { version = "0.11.1", default-features = false }
 phf_codegen = "0.11.1"

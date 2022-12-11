@@ -1,0 +1,111 @@
+openapi: 3.0.0
+x-stoplight:
+  id: safw04qfifk9h
+info:
+  title: Wordle Assistant API
+  version: '1.0'
+  description: Access Wordle Assistant using a web api
+  license:
+    url: 'https://github.com/floriscornel/wordle-assistant'
+    name: 'Apache-2.0, MIT'
+  contact:
+    name: Floris Cornel
+    email: floris@cornel.email
+servers:
+  - url: 'https://wordle-api.vcx.workers.dev'
+    description: cf-workers
+  - url: 'http://127.0.0.1:5000'
+    description: local
+paths:
+  /recommendations:
+    post:
+      summary: Get Recommendation
+      operationId: post-state
+      responses:
+        '200':
+          $ref: '#/components/responses/RecommendationResposne'
+        '422':
+          description: Unprocessable Entity (WebDAV)
+          content:
+            text/plain:
+              schema:
+                type: string
+      description: Get recommendations based on current game state.
+      requestBody:
+        $ref: '#/components/requestBodies/State'
+      tags:
+        - Recommendations
+    parameters: []
+components:
+  schemas:
+    Guess:
+      title: Guess
+      x-stoplight:
+        id: od8qe3ejvrvti
+      type: array
+      description: Represents a 5 letter word guess including feedback from Wordle.
+      x-tags:
+        - Recommendations
+      minItems: 5
+      maxItems: 5
+      x-examples: {}
+      items:
+        type: object
+        properties:
+          letter:
+            type: string
+            maxLength: 1
+            minLength: 1
+            pattern: '^[a-zA-Z]$'
+            example: a
+          feedback:
+            type: string
+            enum:
+              - NotCorrect
+              - OtherLocation
+              - Correct
+    Word:
+      title: Word
+      x-stoplight:
+        id: 2cu77w5jhcab1
+      type: string
+      pattern: '^[A-Z]{5}$'
+      minLength: 5
+      maxLength: 5
+      example: HAIKU
+      description: A valid 5 letter word
+      x-tags:
+        - Recommendations
+  requestBodies:
+    State:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              guesses:
+                type: array
+                minItems: 0
+                maxItems: 6
+                items:
+                  $ref: '#/components/schemas/Guess'
+      description: Request Body representing current state of the game.
+  responses:
+    RecommendationResposne:
+      description: List of recommended words
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              recommendations:
+                type: array
+                minItems: 0
+                maxItems: 50
+                description: Ordered list of valid words
+                items:
+                  $ref: '#/components/schemas/Word'
+            required:
+              - recommendations
+tags:
+  - name: Recommendations
