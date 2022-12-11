@@ -36,7 +36,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .post_async("/recommendations", |mut req, _ctx| async move {
             let state = req.json::<State>().await?;
             let recommendations = get_recommendations(state);
-            Response::from_json(&recommendations)
+            let cors = Cors::new().with_origins(vec!["*"]).with_methods(vec![
+                Method::Get,
+                Method::Post,
+                Method::Options,
+            ]);
+            Response::from_json(&recommendations)?.with_cors(&cors)
         })
         .get("/worker-version", |_, ctx| {
             let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
