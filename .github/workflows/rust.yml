@@ -30,4 +30,4 @@ jobs:
           args: --features=all -- -D warnings
       - uses: actions-rs/cargo@v1
         with:
-          command: test --features=all
+          command: test
