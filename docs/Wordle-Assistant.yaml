@@ -64,6 +64,9 @@ components:
               - NotCorrect
               - OtherLocation
               - Correct
+        required:
+          - letter
+          - feedback
     Word:
       title: Word
       x-stoplight:
