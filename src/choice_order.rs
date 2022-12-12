@@ -38,7 +38,7 @@ fn order_choices(words: &mut Vec<Word>) {
         }
         let letter_score: f64 = (letter_score as f64) / (words.len() * WORDLE_LETTER_COUNT) as f64;
         let frequency_score = *word_frequencies.get(word).unwrap_or(&0) as f64 / freq_max as f64;
-        (10_000_000.0 * (letter_score + frequency_score)) as _
+        (10_000_000.0 * (10.0 * letter_score + frequency_score)) as _
     };
 
     let mut mapped: Vec<([u8; WORDLE_LETTER_COUNT], u64)> = words
@@ -51,38 +51,28 @@ fn order_choices(words: &mut Vec<Word>) {
 
 #[cfg(test)]
 mod tests {
-    use super::{order_choices, Word};
+    use crate::wordle::Wordle;
 
     #[test]
     fn check_preferred_order() {
-        let input = vec![
-            "AROSE", "SOARE", "AEROS", "SERAI", "REAIS", "ARISE", "RAISE", "AESIR", "ALOES",
-            "REALS", "LAERS", "SERAL", "ARLES", "LEARS", "RALES", "LARES", "EARLS", "LASER",
-            "TOEAS", "STOAE", "RESAT", "ARETS", "STRAE", "REAST", "STARE", "EARST", "ASTER",
-            "TEARS", "STEAR", "TARES", "TASER", "TERAS", "RATES", "AISLE", "AEONS", "NARES",
-            "SANER", "EARNS", "REANS", "NEARS", "SNARE", "ANISE", "ISNAE", "SAINE", "URSAE",
-            "URASE", "UREAS", "AURES", "ARSED", "SARED",
-        ];
         let expected = vec![
-            "RATES", "LASER", "TEARS", "STARE", "ASTER", "TASER", "TARES", "STEAR", "TERAS",
-            "REAST", "STRAE", "EARST", "RESAT", "ARETS", "RAISE", "REALS", "EARLS", "ARISE",
-            "ARLES", "LARES", "SERAL", "RALES", "LEARS", "LAERS", "EARNS", "SNARE", "NEARS",
-            "SANER", "NARES", "REANS", "REAIS", "SERAI", "AESIR", "AROSE", "AEROS", "SOARE",
-            "URSAE", "AURES", "URASE", "UREAS", "ARSED", "SARED", "TOEAS", "STOAE", "AISLE",
-            "ANISE", "SAINE", "ISNAE", "ALOES", "AEONS",
+            "YEARS", "RATES", "AROSE", "AEROS", "SOARE", "OTHER", "RAISE", "ARISE", "REAIS",
+            "SERAI", "AESIR", "STORE", "LASER", "REALS", "EARLS", "ARLES", "ALOES", "LARES",
+            "SERAL", "RALES", "LEARS", "LAERS", "TEARS", "STARE", "ASTER", "TASER",
         ];
 
-        let mut words: Vec<Word> = input
+        let words = Wordle::new()
+            .ordered_permutations()
             .into_iter()
-            .filter(|x| x.len() == 5)
-            .map(|x| x.as_bytes().try_into().unwrap())
-            .collect();
+            .take(expected.len())
+            .map(|x| String::from_utf8(x.to_vec()).unwrap())
+            .collect::<Vec<String>>();
+
         let expected_transformed = expected
             .into_iter()
-            .filter(|x| x.len() == 5)
-            .map(|x| x.as_bytes().try_into().unwrap())
-            .collect::<Vec<Word>>();
-        order_choices(&mut words);
+            .map(|x| x.to_owned())
+            .collect::<Vec<String>>();
+
         assert_eq!(words, expected_transformed);
     }
 }
