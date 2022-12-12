@@ -13,19 +13,14 @@ fn log_request(req: &Request) {
 }
 
 fn cors_allow_all_origins(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
-    let cors = Cors::new().with_origins(vec!["*"]).with_methods(vec![
-        Method::Get,
-        Method::Post,
-        Method::Options,
-    ]);
-    Response::empty()?.with_status(204).with_cors(&cors)
+    Ok(Response::empty()?.with_status(204))
 }
 
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
     log_request(&req);
 
-    Router::new()
+    let response = Router::new()
         .get("/", |_, _| Response::from_html(include_str!("index.html")))
         .get("/worker-version", |_, ctx| {
             let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
@@ -38,7 +33,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             let mut headers = Headers::new();
             headers.set("content-type", "text/yaml")?;
             let txt = include_str!("../../docs/Wordle-Assistant.yaml");
-            Ok(Response::ok(txt)?.with_headers(headers))
+            Ok(Response::from_html(txt)?.with_headers(headers))
         })
         .options("/openapi.yaml", cors_allow_all_origins)
         .post_async("/recommendations", |mut req, _ctx| async move {
@@ -48,5 +43,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         })
         .options("/recommendations", cors_allow_all_origins)
         .run(req, env)
-        .await
+        .await;
+
+    response?.with_cors(
+        &Cors::new()
+            .with_origins(vec!["*"])
+            .with_allowed_headers(vec!["*"])
+            .with_methods(Method::all()),
+    )
 }
