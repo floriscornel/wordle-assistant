@@ -56,9 +56,8 @@ mod tests {
     #[test]
     fn check_preferred_order() {
         let expected = vec![
-            "YEARS", "RATES", "AROSE", "AEROS", "SOARE", "OTHER", "RAISE", "ARISE", "REAIS",
-            "SERAI", "AESIR", "STORE", "LASER", "REALS", "EARLS", "ARLES", "ALOES", "LARES",
-            "SERAL", "RALES", "LEARS", "LAERS", "TEARS", "STARE", "ASTER", "TASER",
+            "YEARS", "AROSE", "AEROS", "SOARE", "OTHER", "RATES", "RAISE", "ARISE", "SERIA",
+            "REAIS", "SERAI", "AESIR", "STORE", "LASER",
         ];
 
         let words = Wordle::new()

@@ -199,7 +199,7 @@ mod tests {
             ('R', NotCorrect),
         ]);
         let found = wordle.permutations();
-        let expected = vec!["BEGIN", "LEVIN"];
+        let expected = vec!["NEXIN", "LEVIN", "BEGIN"];
         assert_eq!(
             HashSet::<String>::from_iter(
                 found
@@ -228,7 +228,7 @@ mod tests {
             ('Y', NotCorrect),
         ]);
         let found = wordle.permutations();
-        let expected = vec!["DIANE", "ENTIA", "ELAIN", "INANE", "LIANE"];
+        let expected = vec!["NELIA", "ENTIA", "DIANE", "ELAIN", "INANE", "LIANE"];
         assert_eq!(
             HashSet::<String>::from_iter(
                 found
