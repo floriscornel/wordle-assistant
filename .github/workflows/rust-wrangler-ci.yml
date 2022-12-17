@@ -21,6 +21,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
           components: rustfmt, clippy
           target: "wasm32-unknown-unknown"
@@ -29,6 +30,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           shared-key: "wordle-assistant"
+          cache-on-failure: "true"
           workspaces: |
             .
             ./cf-worker
@@ -55,7 +57,12 @@ jobs:
         with:
           command: test
 
+      - name: Install Wrangler
+        if: github.ref == 'refs/heads/main'
+        run: yarn global add
+
       - name: Wrangler Build
+        if: github.ref == 'refs/heads/main'
         run: wrangler publish --dry-run
 
       - name: Wrangler Publish
