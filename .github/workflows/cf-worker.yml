@@ -10,8 +10,8 @@ env:
   CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
 jobs:
-  deploy:
-    name: Build & Publish
+  wrangler-build-push:
+    name: Wrangler Build & Push
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,40 +20,20 @@ jobs:
       - name: Checkout git repo
         uses: actions/checkout@v3
 
-      - name: Install Rust toolchain
+      - name: Install Wrangler
+        run: yarn global add wrangler
+
+      - name: Install Rust toolchain (wasm32)
         uses: actions-rs/toolchain@v1
         with:
+          profile: minimal
           toolchain: stable
-          override: true
-          components: rustfmt, clippy
+          target: "wasm32-unknown-unknown"
 
       - name: Configure cache
         uses: Swatinem/rust-cache@v2
-
-      - name: Check for type errors
-        uses: actions-rs/cargo@v1
         with:
-          command: check
-
-      - name: Check formatting
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
-
-      - name: Check Clippy lints
-        uses: actions-rs/clippy-check@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          args: --features=all -- -D warnings
-
-      - name: Run tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-
-      - name: Install Wrangler
-        run: yarn global add wrangler
+          working-directory: "./cf-worker"
 
       - name: Wrangler Build
         run: wrangler publish --dry-run
