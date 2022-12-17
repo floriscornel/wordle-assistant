@@ -33,7 +33,10 @@ jobs:
       - name: Configure cache
         uses: Swatinem/rust-cache@v2
         with:
-          working-directory: "./cf-worker"
+          shared-key: "wordle-assistant"
+          workspaces: |
+            .
+            ./cf-worker
 
       - name: Wrangler Build
         run: wrangler publish --dry-run

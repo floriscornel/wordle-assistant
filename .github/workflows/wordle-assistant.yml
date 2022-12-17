@@ -23,6 +23,11 @@ jobs:
 
       - name: Configure cache
         uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "wordle-assistant"
+          workspaces: |
+            .
+            ./cf-worker
 
       - name: Check for type errors
         uses: actions-rs/cargo@v1
