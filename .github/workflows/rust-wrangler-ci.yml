@@ -1,10 +1,14 @@
-name: Wordle Assistant
+name: Cloudflare Worker
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
 
 env:
   CARGO_TERM_COLOR: always
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
 jobs:
   check:
@@ -18,8 +22,8 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          override: true
           components: rustfmt, clippy
+          target: "wasm32-unknown-unknown"
 
       - name: Configure cache
         uses: Swatinem/rust-cache@v2
@@ -50,3 +54,10 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
+
+      - name: Wrangler Build
+        run: wrangler publish --dry-run
+
+      - name: Wrangler Publish
+        if: github.ref == 'refs/heads/main'
+        run: wrangler publish
