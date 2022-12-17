@@ -59,7 +59,7 @@ jobs:
 
       - name: Install Wrangler
         if: github.ref == 'refs/heads/main'
-        run: yarn global add
+        run: yarn global add wrangler
 
       - name: Wrangler Build
         if: github.ref == 'refs/heads/main'
