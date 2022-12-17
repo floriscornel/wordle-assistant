@@ -1,8 +1,12 @@
 [package]
-name = "cf-worker"
-version = "0.1.1"
 authors = ["Floris Cornel <floris@cornel.email>"]
+description = "A CLI tool to assist in solving wordle puzzles"
 edition = "2021"
+license = "MIT/Apache-2.0"
+name = "cf-worker"
+readme = "../README.md"
+repository = "https://github.com/floriscornel/wordle-assistant"
+version = "0.1.2"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

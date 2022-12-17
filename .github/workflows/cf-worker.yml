@@ -7,6 +7,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
 jobs:
   deploy:
@@ -16,24 +17,46 @@ jobs:
       run:
         working-directory: cf-worker
     steps:
-      - name: Checkout
+      - name: Checkout git repo
         uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           override: true
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@v2
-      - uses: actions-rs/cargo@v1
+
+      - name: Configure cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check for type errors
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
-      - uses: actions-rs/clippy-check@v1
+
+      - name: Check Clippy lints
+        uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --features=all -- -D warnings
-      - uses: actions-rs/cargo@v1
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
         with:
           command: test
-      - run: yarn global add wrangler
-      - run: wrangler publish
+
+      - name: Install Wrangler
+        run: yarn global add wrangler
+
+      - name: Wrangler Build
+        run: wrangler publish --dry-run
+
+      - name: Wrangler Publish
+        run: wrangler publish
