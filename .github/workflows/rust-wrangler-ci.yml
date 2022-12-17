@@ -50,7 +50,7 @@ jobs:
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --features=all -- -D warnings
+          args: --all-features
 
       - name: Run tests
         uses: actions-rs/cargo@v1
@@ -64,7 +64,9 @@ jobs:
       - name: Wrangler Build
         if: github.ref == 'refs/heads/main'
         run: wrangler publish --dry-run
+        working-directory: ./cf-worker
 
       - name: Wrangler Publish
         if: github.ref == 'refs/heads/main'
         run: wrangler publish
+        working-directory: ./cf-worker
