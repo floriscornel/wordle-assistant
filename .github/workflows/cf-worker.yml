@@ -1,17 +1,23 @@
-name: Check pull request
+name: Cloudflare Worker
 
 on:
-  pull_request:
+  push:
+    branches:
+      - main
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check:
-    name: Check Submission
+  deploy:
+    name: Build & Publish
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cf-worker
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -29,3 +35,5 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
+      - run: yarn global add wrangler
+      - run: wrangler publish
