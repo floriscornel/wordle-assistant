@@ -1,20 +1,20 @@
-name: Rust
+name: Deploy CF Worker
 
 on:
   push:
     branches:
       - main
-  pull_request:
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check:
-    name: Check Submission
+  deploy:
+    name: Deploy CF Worker
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -32,3 +32,8 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
+      - name: Publish to Cloudflare
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          workingDirectory: "cf-worker"
