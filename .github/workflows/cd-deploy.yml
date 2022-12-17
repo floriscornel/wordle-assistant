@@ -32,6 +32,24 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+          workingDirectory: "cf-worker"
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --features=all -- -D warnings
+          workingDirectory: "cf-worker"
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          workingDirectory: "cf-worker"
+      - uses: actions-rs/cargo@v1
+        with:
+          command: install -q worker-build && worker-build --release
+          workingDirectory: "cf-worker"
       - name: Publish to Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
