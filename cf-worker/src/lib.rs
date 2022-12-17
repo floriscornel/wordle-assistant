@@ -27,7 +27,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             Response::ok(version)
         })
         .get("/robots.txt", |_, _ctx| {
-            Response::ok("User-agent: * \n Disallow: /")
+            Response::ok("User-agent: * \n Disallow: /\n")
         })
         .get("/openapi.yaml", |_, _| {
             let mut headers = Headers::new();
