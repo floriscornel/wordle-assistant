@@ -27,7 +27,7 @@ paths:
         '422':
           description: Unprocessable Entity (WebDAV)
           content:
-            text/plain:
+            application/json:
               schema:
                 type: string
       description: Get recommendations based on current game state.
