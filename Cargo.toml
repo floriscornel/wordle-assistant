@@ -29,7 +29,7 @@ inquire = { version = "0.5.2", features = ["date", "editor"], optional = true }
 axum = { version = "0.6.1", optional = true }
 tower-http = { version = "0.3.5", features = ["cors"], optional = true }
 tokio = { version = "1.23.0", features = ["full"], optional = true }
-serde = { version = "1.0.151", features = ["derive"], optional = true }
+serde = { version = "1.0.152", features = ["derive"], optional = true }
 
 [build-dependencies]
 csv = "1.1.6"
