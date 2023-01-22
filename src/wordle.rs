@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[cfg(feature = "api_code")]
 use serde::{Deserialize, Serialize};
 
@@ -14,65 +16,40 @@ pub enum Feedback {
 }
 
 pub struct Wordle {
-    guesses: Vec<Guess>,
     word_list: WordList,
 }
 
 impl Wordle {
     pub fn new() -> Self {
         Self {
-            guesses: Vec::new(),
             word_list: WordList::new(),
         }
     }
 
     pub fn guess(&mut self, guess: Guess) {
-        self.guesses.push(guess);
-    }
-
-    pub fn permutations(&self) -> Vec<Word> {
-        let mut found = Vec::new();
-        for word in &self.word_list.set {
-            if self.check(word) {
-                found.push(*word);
-            }
-        }
-        found
-    }
-
-    fn check(&self, word: &[u8; WORDLE_LETTER_COUNT]) -> bool {
-        for guess in &self.guesses {
-            let mut allowed = vec![];
-            for idx in 0..WORDLE_LETTER_COUNT {
-                let (char, feedback): (u8, &Feedback) = (guess[idx].0 as u8, &guess[idx].1);
-                match feedback {
-                    Feedback::NotCorrect => {
-                        if !allowed.contains(&char) && word.contains(&char) {
-                            return false;
-                        } else if allowed.contains(&char) {
-                            let allowed_count = allowed.iter().filter(|&x| *x == char).count();
-                            let found_count = word.iter().filter(|&x| *x == char).count();
-                            if found_count > allowed_count {
-                                return false;
-                            }
-                        }
-                    }
-                    Feedback::Correct => {
-                        if word[idx] != char {
-                            return false;
-                        }
-                        allowed.push(char);
-                    }
-                    Feedback::OtherLocation => {
-                        if word[idx] == char || !word.contains(&char) {
-                            return false;
-                        }
-                        allowed.push(char);
-                    }
+        let mut min_counts = HashMap::new();
+        for idx in 0..WORDLE_LETTER_COUNT {
+            let (char, feedback): (u8, &Feedback) = (guess[idx].0 as u8, &guess[idx].1);
+            let min_count = min_counts.entry(char).or_insert(0);
+            match feedback {
+                Feedback::NotCorrect => {
+                    self.word_list.incorrect(char, idx);
+                }
+                Feedback::Correct => {
+                    self.word_list.correct(char, idx);
+                    *min_count += 1;
+                }
+                Feedback::OtherLocation => {
+                    self.word_list.other_location(char, idx);
+                    *min_count += 1;
                 }
             }
         }
-        true
+        self.word_list.char_counts(min_counts);
+    }
+
+    pub fn permutations(&self) -> Vec<Word> {
+        self.word_list.set.iter().map(|&x| x).collect()
     }
 }
 
@@ -170,6 +147,7 @@ mod tests {
     #[test]
     fn example_3() {
         let mut wordle = Wordle::new();
+        //BEGIN
         wordle.guess([
             ('H', NotCorrect),
             ('A', NotCorrect),
