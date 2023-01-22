@@ -63,9 +63,15 @@ dependencies = [
 
 [[package]]
 name = "axum-core"
+<<<<<<< HEAD
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1cae3e661676ffbacb30f1a824089a8c9150e71017f7e1e38f2aa32009188d34"
+=======
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f487e40dc9daee24d8a1779df88522f159a54a980f99cfbe43db0be0bd3444a8"
+>>>>>>> daadb5800e82d29c6e6a80f72749be33414a68e1
 dependencies = [
  "async-trait",
  "bytes",
@@ -200,9 +206,15 @@ dependencies = [
 
 [[package]]
 name = "cxx"
+<<<<<<< HEAD
 version = "1.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b61a7545f753a88bcbe0a70de1fcc0221e10bfc752f576754fa91e663db1622e"
+=======
+version = "1.0.86"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51d1075c37807dcf850c379432f0df05ba52cc30f279c5cfc43cc221ce7f8579"
+>>>>>>> daadb5800e82d29c6e6a80f72749be33414a68e1
 dependencies = [
  "cc",
  "cxxbridge-flags",
@@ -212,9 +224,15 @@ dependencies = [
 
 [[package]]
 name = "cxx-build"
+<<<<<<< HEAD
 version = "1.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f464457d494b5ed6905c63b0c4704842aba319084a0a3561cdc1359536b53200"
+=======
+version = "1.0.86"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5044281f61b27bc598f2f6647d480aed48d2bf52d6eb0b627d84c0361b17aa70"
+>>>>>>> daadb5800e82d29c6e6a80f72749be33414a68e1
 dependencies = [
  "cc",
  "codespan-reporting",
@@ -227,6 +245,7 @@ dependencies = [
 
 [[package]]
 name = "cxxbridge-flags"
+<<<<<<< HEAD
 version = "1.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "43c7119ce3a3701ed81aca8410b9acf6fc399d2629d057b87e2efa4e63a3aaea"
@@ -236,6 +255,17 @@ name = "cxxbridge-macro"
 version = "1.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "65e07508b90551e610910fa648a1878991d367064997a596135b86df30daf07e"
+=======
+version = "1.0.86"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "61b50bc93ba22c27b0d31128d2d130a0a6b3d267ae27ef7e4fae2167dfe8781c"
+
+[[package]]
+name = "cxxbridge-macro"
+version = "1.0.86"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39e61fda7e62115119469c7b3591fd913ecca96fb766cfd3f2e2502ab7bc87a5"
+>>>>>>> daadb5800e82d29c6e6a80f72749be33414a68e1
 dependencies = [
  "proc-macro2",
  "quote",
@@ -244,9 +274,9 @@ dependencies = [
 
 [[package]]
 name = "dyn-clone"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f94fa09c2aeea5b8839e414b7b841bf429fd25b9c522116ac97ee87856d88b2"
+checksum = "c9b0705efd4599c15a38151f4721f7bc388306f61084d3bfd50bd07fbca5cb60"
 
 [[package]]
 name = "fastrand"
@@ -664,9 +694,15 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
 name = "proc-macro2"
+<<<<<<< HEAD
 version = "1.0.50"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ef7d57beacfaf2d8aee5937dab7b7f28de3cb8b1828479bb5de2a7106f2bae2"
+=======
+version = "1.0.49"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57a8eca9f9c4ffde41714334dee777596264c7825420f521abc92b5b5deb63a5"
+>>>>>>> daadb5800e82d29c6e6a80f72749be33414a68e1
 dependencies = [
  "unicode-ident",
 ]
@@ -776,9 +812,9 @@ dependencies = [
 
 [[package]]
 name = "serde_path_to_error"
-version = "0.1.8"
+version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "184c643044780f7ceb59104cef98a5a6f12cb2288a7bc701ab93a362b49fd47d"
+checksum = "26b04f22b563c91331a10074bda3dd5492e3cc39d56bd557e91c0af42b6c7341"
 dependencies = [
  "serde",
 ]
@@ -920,9 +956,15 @@ dependencies = [
 
 [[package]]
 name = "tokio"
+<<<<<<< HEAD
 version = "1.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "597a12a59981d9e3c38d216785b0c37399f6e415e8d0712047620f189371b0bb"
+=======
+version = "1.24.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d9f76183f91ecfb55e1d7d5602bd1d979e38a3a522fe900241cf195624d67ae"
+>>>>>>> daadb5800e82d29c6e6a80f72749be33414a68e1
 dependencies = [
  "autocfg",
  "bytes",
