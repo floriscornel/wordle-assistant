@@ -36,8 +36,8 @@ fn order_choices(words: &mut Vec<Word>) {
     }
 
     let max_letters = letter_counts
-        .iter()
-        .map(|(_, counts)| counts.iter().sum::<usize>())
+        .values()
+        .map(|counts| counts.iter().sum::<usize>())
         .max()
         .unwrap_or(0);
 

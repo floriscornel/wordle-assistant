@@ -23,8 +23,7 @@ fn main() {
 
     writeln!(
         &mut file,
-        "pub const WORDLE_LETTER_COUNT: usize = {};",
-        WORDLE_LETTER_COUNT
+        "pub const WORDLE_LETTER_COUNT: usize = {WORDLE_LETTER_COUNT};"
     )
     .unwrap();
     writeln!(&mut file, "pub type Word = [u8; WORDLE_LETTER_COUNT];",).unwrap();

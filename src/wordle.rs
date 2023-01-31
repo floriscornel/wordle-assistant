@@ -28,8 +28,8 @@ impl Wordle {
 
     pub fn guess(&mut self, guess: Guess) {
         let mut min_counts = HashMap::new();
-        for idx in 0..WORDLE_LETTER_COUNT {
-            let (char, feedback): (u8, &Feedback) = (guess[idx].0 as u8, &guess[idx].1);
+        for (idx, (char, feedback)) in guess.iter().enumerate().take(WORDLE_LETTER_COUNT) {
+            let char = *char as u8;
             let min_count = min_counts.entry(char).or_insert(0);
             match feedback {
                 Feedback::NotCorrect => {
@@ -49,7 +49,7 @@ impl Wordle {
     }
 
     pub fn permutations(&self) -> Vec<Word> {
-        self.word_list.set.iter().map(|&x| x).collect()
+        self.word_list.set.iter().copied().collect()
     }
 }
 
