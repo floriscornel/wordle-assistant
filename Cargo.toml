@@ -26,9 +26,9 @@ all = ["cli", "api"]
 [dependencies]
 phf = { version = "0.11.1", default-features = false }
 inquire = { version = "0.5.3", features = ["date", "editor"], optional = true }
-axum = { version = "0.6.3", optional = true }
+axum = { version = "0.6.4", optional = true }
 tower-http = { version = "0.3.5", features = ["cors"], optional = true }
-tokio = { version = "1.24.2", features = ["full"], optional = true }
+tokio = { version = "1.25.0", features = ["full"], optional = true }
 serde = { version = "1.0.152", features = ["derive"], optional = true }
 
 [build-dependencies]
