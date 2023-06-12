@@ -12,7 +12,7 @@ version = "0.1.2"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-worker = "0.0.16"
+worker = "0.0.17"
 wordle-assistant = { path = "../", features = ["api_code"] }
 
 [profile.release]
