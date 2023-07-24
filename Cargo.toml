@@ -27,7 +27,7 @@ all = ["cli", "api"]
 phf = { version = "0.11.1", default-features = false }
 inquire = { version = "0.6.2", features = ["date", "editor"], optional = true }
 axum = { version = "0.6.18", optional = true }
-tower-http = { version = "0.4.0", features = ["cors"], optional = true }
+tower-http = { version = "0.4.3", features = ["cors"], optional = true }
 tokio = { version = "1.28.2", features = ["full"], optional = true }
 serde = { version = "1.0.164", features = ["derive"], optional = true }
 
